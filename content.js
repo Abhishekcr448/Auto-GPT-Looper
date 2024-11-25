@@ -314,7 +314,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'scraped_text.txt';
+            a.download = 'Auto_GPT_Looper_extracted_text.txt';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
