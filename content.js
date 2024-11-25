@@ -22,43 +22,6 @@
         return sendButton ? sendButton.disabled : false;
     }
 
-    // Function to send the prompt and update progress
-    async function sendPrompt(prompts, totalloopCount, currentLoop, progressLabel) {
-        try {
-            for (let i = 0; i < prompts.length; i++) {
-                if (!isLooping) return;
-
-                while (!(await isGenerationInProgress())) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
-
-                const inputField = await waitForElement('[contenteditable="true"]');
-                inputField.innerText = prompts[i];
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                const sendButton = await waitForElement('[data-testid="send-button"]');
-                sendButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                sendButton.click();
-
-                const promptNumber = currentLoop * prompts.length + i + 1;
-                const completionPercentage = ((promptNumber / (totalloopCount * prompts.length)) * 100).toFixed(2);
-                console.log(`Prompt ${promptNumber} sent. Completion: ${completionPercentage}%`);
-                progressLabel.textContent = `Completion: ${completionPercentage}%`;
-            }
-        } catch (error) {
-            console.error('Error:', error.message);
-        }
-    }
-
-    // Function to continuously send prompts until stopped
-    async function startPromptLoop(prompts, totalloopCount, currentLoop, progressLabel) {
-        while (!(await isGenerationInProgress())) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-        await sendPrompt(prompts, totalloopCount, currentLoop, progressLabel);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
     // Function to toggle the popup
     function togglePopup() {
         let popup = document.getElementById('custom-prompt-popup');
