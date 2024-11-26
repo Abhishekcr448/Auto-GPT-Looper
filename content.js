@@ -222,7 +222,8 @@
                                 while (!(await isGenerationInProgress())) {
                                     await new Promise(resolve => setTimeout(resolve, 1000));
                                 }
-                                console.log(`Prompt ${currentPrompt + 1} sent`);
+
+                                // console.log(`Prompt ${currentPrompt + 1} sent`);
                                 const inputField = await waitForElement('[contenteditable="true"]');
                                 inputField.innerText = prompts[currentPrompt];
                                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -232,9 +233,13 @@
                                 sendButton.click();
 
                                 const completionPercentage = ((currentLoop * prompts.length + currentPrompt + 1) / (loopCount * prompts.length) * 100).toFixed(2);
-                                console.log(`Prompt ${currentLoop * prompts.length + currentPrompt + 1} sent. Completion: ${completionPercentage}%`);
+                                // console.log(`Prompt ${currentLoop * prompts.length + currentPrompt + 1} sent. Completion: ${completionPercentage}%`);
                                 progressLabel.textContent = `Completion: ${completionPercentage}%`;
                                 await Promise.resolve();
+
+                                while (await isGenerationInProgress()) {
+                                    await new Promise(resolve => setTimeout(resolve, 1000));
+                                }
                             }
                         } catch (error) {
                             console.error('Error:', error.message);
